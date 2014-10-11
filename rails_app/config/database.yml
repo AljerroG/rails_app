@@ -5,22 +5,13 @@
 #   gem 'sqlite3'
 #
 default: &default
-  adapter: mysql2
-  encoding: utf8
-  # database: spider
-  database: permitsdb
-  pool: 5
-  # username: root
-  username: spider
-  password: build123zoom
-  host: ingestdb.buildzoom.com
-  port: 3306
+  adapter: sqlite3
   pool: 5
   timeout: 5000
 
 development:
   <<: *default
-  # database: db/development.sqlite3
+  database: db/development.sqlite3
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".

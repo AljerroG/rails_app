@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>NewIssues</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+  <%= auto_discovery_link_tag(:rss, issues_path(:rss)) %>
+</head>
+<body>
+
+	<ul>
+		<li><a href="/issues">Issues</a></li>
+		<li><a href="/issues/new">New Issues</a></li>
+		<%= yield :nav %>
+	</ul>
+
+<%= yield %>
+
+</body>
+</html>

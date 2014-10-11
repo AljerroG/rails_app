@@ -7,13 +7,16 @@
 default: &default
   adapter: mysql2
   encoding: utf8
-  # database: spider
-  database: permitsdb
+  reconnect: true
+  # database: permitsdb
+  database: spider
   pool: 5
-  # username: root
-  username: spider
-  password: build123zoom
-  host: ingestdb.buildzoom.com
+  # username: spider
+  username: root
+  # password: build123zoom
+  password: 
+  # host: ingestdb.buildzoom.com
+  host: localhost
   port: 3306
   pool: 5
   timeout: 5000
