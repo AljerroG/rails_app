@@ -1,0 +1,49 @@
+<%= form_for(@databaselist) do |f| %>
+  <% if @databaselist.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@databaselist.errors.count, "error") %> prohibited this databaselist from being saved:</h2>
+
+      <ul>
+      <% @databaselist.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :state %><br>
+    <%= f.text_field :state %>
+  </div>
+  <div class="field">
+    <%= f.label :area_type %><br>
+    <%= f.text_field :area_type %>
+  </div>
+  <div class="field">
+    <%= f.label :state_abb %><br>
+    <%= f.text_field :state_abb %>
+  </div>
+  <div class="field">
+    <%= f.label :state_full %><br>
+    <%= f.text_field :state_full %>
+  </div>
+  <div class="field">
+    <%= f.label :dbname %><br>
+    <%= f.text_field :dbname %>
+  </div>
+  <div class="field">
+    <%= f.label :link %><br>
+    <%= f.text_area :link %>
+  </div>
+  <div class="field">
+    <%= f.label :comment %><br>
+    <%= f.text_area :comment %>
+  </div>
+  <div class="field">
+    <%= f.label :scripter %><br>
+    <%= f.text_area :scripter %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
