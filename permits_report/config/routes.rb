@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   resources :database_lists
 
   get '/runtime_reports' => 'runtime#index'
+  get '/runtime_reports/?weeks=:weeks' => 'runtime#index'
 
   get 'filter/' => 'database_lists#index'
   get 'filter/:comment' => 'database_lists#filter'

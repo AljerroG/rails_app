@@ -1,6 +1,10 @@
 <head>
 
-<li style="font-family:verdana;font-size:14px"><%= link_to "Database List", database_lists_path %></a></li><br>
+<li style="font-family:verdana;font-size:14px"><%= link_to "Database List", database_lists_path %></a></li>
+
+<form action="<%= '/runtime_reports/' %>" method="get" >
+  <p>Number of Weeks: <%= text_field_tag :weeks, params[:weeks] %></p>
+</form>
 
 	<title>Permit Reports</title>
 </head>
@@ -16,6 +20,14 @@
 </tr>
 <tr>
 
+	<%if !@nmstates.blank? %>
+		Missing Cities : 
+		<% @nmstates.each do |s| %>
+			<%= s %>, 
+		<% end %>
+		<br><br>
+	<% end %>
+
 <td> -- </td>
 <td> -- </td>
 
@@ -28,7 +40,7 @@
 	<% counter = 0 %>
 	<% rundate = eachdate.strftime('%m%d').gsub(/^0/, '') %>
 	<% year = eachdate.strftime('%Y') %>
-	<% @dstates.each do |eachstate| %>
+	<% @allstates.each do |eachstate| %>
 		<% Runtime.select("insertcount, runtime").where("state = '"+eachstate.state+"' and rundate = '"+rundate+"' and dateformal like '"+year+"%'").each do |e_insert| %>
 			<% totalcount = totalcount + e_insert.insertcount.to_i %>
 			<% hour = e_insert.runtime.gsub(/(\d+)\:\d+\:\d+$/, '\1') %>
@@ -48,19 +60,26 @@
 	<td><%= totalcount %> inserted, [ <%= '%02d' % hrs %> : <%= '%02d' % mins %> : <%= '%02d' % secs %>  ]</td>
 <% end %>
 
-<% @dstates.each do |eachstate| %>
+<% @allstates.each do |eachstate| %>
 	<% statcount = 0 %>
-	<% @alldates.each do |eachdate| %>
+	<% @alldates.each_with_index do |eachdate, index| %>
 		<% dd = eachdate.strftime('%d').gsub(/^0/, '').to_i %>
 		<% rundate = eachdate.strftime('%m%d').gsub(/^0/, '') %>
 		<% year = eachdate.strftime('%Y') %>
-		<% Runtime.select("insertcount").where("state = '"+eachstate.state+"' and rundate = '"+rundate+"' and dateformal like '"+year+"%'").each do |icount| %>
-			<% if icount.insertcount.to_i == 0 %>
+		<% @counts = Runtime.select("state, insertcount").where("state = '"+eachstate.state+"' and rundate = '"+rundate+"' and dateformal like '"+year+"%'").group("state").each do |icount| %>
+			<% if index < 7 %>
+				<% if icount.insertcount.to_i == 0 %>
+					<% statcount += 1 %>
+				<% end %>
+			<% end %>
+		<% end %>
+		<% if index < 7 %>
+			<% if @counts == [] %>
 				<% statcount += 1 %>
 			<% end %>
 		<% end %>
 	<% end %>
-	<% if statcount > 7 %>
+	<% if statcount == 7 %>
 		<tr bgcolor=\"#FF0000\" style=\"color: #ffffff\">
 	<% else %>
 		<tr>
@@ -78,7 +97,7 @@
 	<% @alldates.each do |eachdate| %>
 		<% rundate = eachdate.strftime('%m%d').gsub(/^0/, '') %>
 		<% year = eachdate.strftime('%Y') %>
-		<% @result = Runtime.select("runtime, pagecount, insertcount").where("state = '"+eachstate.state+"' and rundate = '"+rundate+"' and dateformal like '"+year+"%'").each do |fresult| %>
+		<% @result = Runtime.select("state, runtime, pagecount, insertcount").where("state = '"+eachstate.state+"' and rundate = '"+rundate+"' and dateformal like '"+year+"%'").group("state").each do |fresult| %>
 			<% if @result != [] %>
 				<td><%= fresult.insertcount %> inserted [ <%= fresult.pagecount %>, <%= fresult.runtime %> ]</td>
 			<% else %>
